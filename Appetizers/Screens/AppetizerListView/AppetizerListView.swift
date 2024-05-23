@@ -9,42 +9,36 @@ import SwiftUI
 
 struct AppetizerListView: View {
     
-    @StateObject var viewModel = AppetizerListViewModel()
-    
-    @State private var appetizers: [Appetizer] = []
-    
-    @State private var isShowingDetail = false
-    
-    @State private var selectedAppetizer: Appetizer?
+    @StateObject var vm = AppetizerListViewModel()
     
     var body: some View {
         ZStack{
             NavigationView {
-                List(viewModel.appetizers){
+                List(vm.appetizers){
                     appetizer in
                         AppetizerListCell(appetizer: appetizer)
                         .onTapGesture {
-                            isShowingDetail = true
-                            selectedAppetizer = appetizer
+                            vm.isShowingDetail = true
+                            vm.selectedAppetizer = appetizer
                         }
                 }
                 .navigationTitle("🍟 Appetizers")
-                .disabled(isShowingDetail)
+                .disabled(vm.isShowingDetail)
             }
             .onAppear{
-                viewModel.getAppetizers()
+                vm.getAppetizers()
             }
-            .blur(radius: isShowingDetail ? 20 : 0)
+            .blur(radius: vm.isShowingDetail ? 20 : 0)
             
-            if isShowingDetail {
-                AppetizerDetailView(appetizer: selectedAppetizer ?? MockData.sampleAppetizer, isShowingDetail: $isShowingDetail)
+            if vm.isShowingDetail {
+                AppetizerDetailView(appetizer: vm.selectedAppetizer ?? MockData.sampleAppetizer, isShowingDetail: $vm.isShowingDetail)
             }
-            if viewModel.isLoading {
+            if vm.isLoading {
                 LoadingView()
             }
 
         }
-        .alert(item: $viewModel.alertItem) {
+        .alert(item: $vm.alertItem) {
             alertItem in
             Alert(
                 title: alertItem.title,

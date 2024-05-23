@@ -19,45 +19,14 @@ struct AppetizerDetailView: View {
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 300, height: 225)
             VStack{
-                Text(appetizer.name)
-                    .font(.title2)
-                    .fontWeight(.semibold)
-//                    .padding()
-                Text(appetizer.description)
-                    .multilineTextAlignment(.center)
-                    .font(.body)
-                    .padding()
+                AppetizerTitle(name: appetizer.name)
+
+                AppetizerDescription(description: appetizer.description)
+
                 HStack(spacing: 30) {
-                    VStack(spacing: 5) {
-                        Text("Calories")
-                            .bold()
-                            .font(.caption)
-                        Text("\(appetizer.calories)")
-                            .foregroundStyle(.secondary)
-                            .fontWeight(.semibold)
-                            .italic()
-                    }
-                    .padding()
-                    VStack(spacing:5) {
-                        Text("Carbs")
-                            .bold()
-                            .font(.caption)
-                        Text("\(appetizer.carbs) g")
-                            .foregroundStyle(.secondary)
-                            .fontWeight(.semibold)
-                            .italic()
-                    }
-                    .padding()
-                    VStack(spacing: 5) {
-                        Text("Protein")
-                            .bold()
-                            .font(.caption)
-                        Text("\(appetizer.protein) g")
-                            .foregroundStyle(.secondary)
-                            .fontWeight(.semibold)
-                            .italic()
-                    }
-                    .padding()
+                    NutritionInfo(title: "Calories", value: 99)
+                    NutritionInfo(title: "Carbs", value: 99)
+                    NutritionInfo(title: "Protein", value: 99)
                 }
             }
             
@@ -66,13 +35,7 @@ struct AppetizerDetailView: View {
             Button {
                 
             } label: {
-                Text("$\(appetizer.price, specifier: "%.2f") - Add to Order")
-                    .font(.title3)
-                    .fontWeight(.semibold)
-                    .frame(width: 260, height: 50)
-                    .foregroundColor(.white)
-                    .background(.brandPrimary)
-                    .cornerRadius(10)
+                APButton(title: "$\(appetizer.price, specifier: "%.2f") - Add to Order")
             }
             .padding(.bottom, 30)
         }
@@ -83,16 +46,52 @@ struct AppetizerDetailView: View {
         .overlay(Button {
             isShowingDetail = false
         } label: {
-            Image(systemName: "x.circle.fill")
-                .frame(width: 44, height: 44)
-                .foregroundStyle(.black)
-                .opacity(0.4)
-                .imageScale(.large)
-            
+            XDismissButton()
         }, alignment: .topTrailing)
     }
 }
 
 #Preview {
     AppetizerDetailView(appetizer: MockData.sampleAppetizer, isShowingDetail: .constant(true))
+}
+
+struct NutritionInfo: View {
+    
+    let title: String
+    
+    let value: Int
+    
+    var body: some View {
+        VStack(spacing: 5) {
+
+            Text(title)
+                .bold()
+                .font(.caption)
+
+            Text("\(value)")
+                .foregroundStyle(.secondary)
+                .fontWeight(.semibold)
+                .italic()
+        }
+    }
+}
+
+struct AppetizerDescription: View {
+    let description: String
+    var body: some View {
+        Text(description)
+            .multilineTextAlignment(.center)
+            .font(.body)
+            .padding()
+    }
+}
+
+struct AppetizerTitle: View {
+    let name: String
+    
+    var body: some View {
+        Text(name)
+            .font(.title2)
+            .fontWeight(.semibold)
+    }
 }
