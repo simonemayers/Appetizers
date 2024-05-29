@@ -8,32 +8,51 @@
 import SwiftUI
 
 final class AccountViewModel: ObservableObject {
-    @Published var firstName = ""
-    @Published var lastName = ""
-    @Published var email = ""
-    @Published var birthdate = Date()
-    @Published var isNapkins = false
-    @Published var isUtensils = false
+    
+    @AppStorage("user") private var userData: Data?
+    @Published var user = User()
     @Published var alertItem: AlertItem?
     
-    var isValidForm: Bool {
-        guard !firstName.isEmpty && !lastName.isEmpty && !email.isEmpty else {
+    func saveChanges() {
+        guard isValidForm else { return }
         
-            switch firstName.isEmpty {
+        do {
+            let data = try JSONEncoder().encode(user)
+            userData = data
+            alertItem = FormAlertContext.userSaveSuccess
+        } catch {
+            alertItem = FormAlertContext.invalidUserData
+        }
+    }
+    
+    func retrieveUser(){
+        guard let userData = userData else { return }
+        
+        do {
+            user = try JSONDecoder().decode(User.self, from: userData)
+        } catch {
+            alertItem = FormAlertContext.invalidUserData
+        }
+    }
+    
+    var isValidForm: Bool {
+        guard !user.firstName.isEmpty && !user.lastName.isEmpty && !user.email.isEmpty else {
+        
+            switch user.firstName.isEmpty {
             case true:
                 alertItem = FormAlertContext.invalidFirstName
             case false:
                 break
             }
             
-            switch lastName.isEmpty {
+            switch user.lastName.isEmpty {
             case true:
                 alertItem = FormAlertContext.invalidLastName
             case false:
                 break
             }
             
-            switch email.isEmpty {
+            switch user.email.isEmpty {
             case true:
                 alertItem = FormAlertContext.invalidEmail
             case false:
@@ -43,7 +62,7 @@ final class AccountViewModel: ObservableObject {
             return false
         }
         
-        guard email.isValidEmail else {
+        guard user.email.isValidEmail else {
             alertItem = FormAlertContext.invalidEmail
             return false
         }
@@ -51,9 +70,6 @@ final class AccountViewModel: ObservableObject {
         return true
     }
     
-    func saveChanges() {
-        guard isValidForm else { return }
-        print("Changes have been saved successfully")
-    }
+    
     
 }
