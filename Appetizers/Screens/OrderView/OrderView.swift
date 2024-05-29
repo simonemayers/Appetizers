@@ -8,29 +8,33 @@
 import SwiftUI
 
 struct OrderView: View {
-    @StateObject var vm = OrderViewModel()
-    
     @State private var orderItems = MockData.orderItems
 
     var body: some View {
         NavigationView {
-            VStack{
-                List {
-                    ForEach(orderItems) { appetizer in
-                            AppetizerListCell(appetizer: appetizer)
+            ZStack {
+                if orderItems.isEmpty {
+                    ZStack{
+                        EmptyState(imageName: "exclamationmark.bubble.fill", message: "You have items your order. \nPlease add an appetizer.")
                     }
-                    .onDelete(perform: deleteItems)
+                } else {
+                    VStack{
+                        List {
+                            ForEach(orderItems) { appetizer in
+                                AppetizerListCell(appetizer: appetizer)
+                            }
+                            .onDelete(perform: deleteItems)
+                        }
+                        .listStyle(PlainListStyle())
+                                            
+                        Button {
+                            print("order placed")
+                        } label: {
+                            APButton(title: "$ \(orderItems[0].price, specifier: "%.2f") - Place Order")
+                        }
+                        .padding(.bottom, 25)
+                    }
                 }
-                .listStyle(PlainListStyle())
-                
-                Spacer()
-                
-                Button {
-                    print("order placed")
-                } label: {
-                    APButton(title: "$ \(orderItems[0].price, specifier: "%.2f") - Place Order")
-                }
-                .padding(.bottom, 25)
             }
             .navigationTitle("🧾 Orders")
         }
@@ -38,6 +42,7 @@ struct OrderView: View {
     
     func deleteItems(at offsets: IndexSet) {
         orderItems.remove(atOffsets: offsets)
+        print(orderItems.isEmpty)
     }
     
 }

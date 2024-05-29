@@ -11,8 +11,6 @@ final class OrderViewModel: ObservableObject {
     
     @Published var appetizers: [Appetizer] = []
     
-    func getOrderTotal(){
-        
-    }
+    
     
 }
