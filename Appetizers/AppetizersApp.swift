@@ -24,8 +24,11 @@ struct AppetizersApp: App {
     }()
 
     var body: some Scene {
+        
+        let order = Order()
+        
         WindowGroup {
-            AppetizerTabView()
+            AppetizerTabView().environmentObject(order)
         }
         .modelContainer(sharedModelContainer)
     }
