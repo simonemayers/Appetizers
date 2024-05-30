@@ -16,3 +16,13 @@ struct StandardButtonStyle: ViewModifier {
             .controlSize(.large)
     }
 }
+
+extension Image {
+    func StandardImageStyle() -> some View {
+        self
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 120, height: 90)
+            .cornerRadius(8)
+    }
+}

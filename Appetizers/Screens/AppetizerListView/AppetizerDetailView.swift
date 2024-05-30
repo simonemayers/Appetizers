@@ -17,9 +17,14 @@ struct AppetizerDetailView: View {
     
     var body: some View {
         VStack{
-            AppetizerRemoteImage(urlString: appetizer.imageURL)
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 300, height: 225)
+            AsyncImage(url: URL(string: appetizer.imageURL)) { image in
+                image.StandardImageStyle()
+                    .frame(width: 300, height: 225)
+            } placeholder: {
+                Image(systemName: "fork.knife.fill").StandardImageStyle()
+                    .frame(width: 300, height: 225)
+            }
+                
             VStack{
                 AppetizerTitle(name: appetizer.name)
 
