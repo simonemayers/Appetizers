@@ -19,4 +19,5 @@ struct AlertContext {
     static let invalidResponse = AlertItem(title: Text("Server Error"), message: Text("Invalid response from the server. Please try again later or contact support"), dismissButton: .default(Text("Ok")))
     static let invalidURL = AlertItem(title: Text("Server Error"), message: Text("There was an issue connecting to the server. If this persists, please contact support."), dismissButton: .default(Text("Ok")))
     static let unableToComplete = AlertItem(title: Text("Server Error"), message: Text("Unable to complete your request at this time. Pleasae check your internet connection."), dismissButton: .default(Text("Ok")))
+    
 }
